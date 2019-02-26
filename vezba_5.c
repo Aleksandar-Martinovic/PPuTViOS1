@@ -87,8 +87,47 @@ void remoteControllerCallback(uint16_t code, uint16_t type, uint32_t value)
 		    pthread_cond_signal(&deinitCond);
 		    pthread_mutex_unlock(&deinitMutex);
 			break;
+		case KEYCODE_CHANNEL_1:
+			printf("\nCH 1 pressed\n");
+            changeChannels(1);
+			break;
+		case KEYCODE_CHANNEL_2:
+			printf("\nCH 2 pressed\n");
+            changeChannels(2);
+			break;
+		case KEYCODE_CHANNEL_3:
+			printf("\nCH 3 pressed\n");
+            changeChannels(3);
+			break;
+		case KEYCODE_CHANNEL_4:
+			printf("\nCH 4 pressed\n");
+            changeChannels(4);
+			break;
+		case KEYCODE_CHANNEL_5:
+			printf("\nCH 5 pressed\n");
+            changeChannels(5);
+			break;
+		case KEYCODE_CHANNEL_6:
+			printf("\nCH 6 pressed\n");
+            changeChannels(6);
+			break;
+		case KEYCODE_CHANNEL_7:
+			printf("\nCH 7 pressed\n");
+            changeChannels(7);
+			break;
+		case KEYCODE_CHANNEL_8:
+			printf("\nCH 8 pressed\n");
+            changeChannels(8);
+			break;
+		case KEYCODE_CHANNEL_9:
+			printf("\nCH 9 pressed\n");
+            changeChannels(9);
+			break;
+		case KEYCODE_CHANNEL_0:
+			printf("\nCH 0 pressed\n");
+            changeChannels(0);
+			break;
 		default:
-			printf("\nPress P+, P-, info or exit! \n\n");
+			printf("\nPress P+, P-, channel 0-9, info or exit! \n\n");
 	}
 }
-

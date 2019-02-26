@@ -117,6 +117,17 @@ StreamControllerError channelDown()
     return SC_NO_ERROR;
 }
 
+StreamControllerError changeChannels(int16_t channel)
+{
+	programNumber = channel - 1;
+   
+    /* set flag to start current channel */
+    changeChannel = true;
+
+    return SC_NO_ERROR;
+}
+
+
 StreamControllerError getChannelInfo(ChannelInfo* channelInfo)
 {
     if (channelInfo == NULL)

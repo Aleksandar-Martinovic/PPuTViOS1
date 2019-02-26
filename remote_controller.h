@@ -14,6 +14,18 @@
 #define KEYCODE_P_PLUS 62
 #define KEYCODE_P_MINUS 61
 #define KEYCODE_INFO 358
+#define KEYCODE_CHANNEL_1 2
+#define KEYCODE_CHANNEL_2 3
+#define KEYCODE_CHANNEL_3 4
+#define KEYCODE_CHANNEL_4 5
+#define KEYCODE_CHANNEL_5 6
+#define KEYCODE_CHANNEL_6 7
+#define KEYCODE_CHANNEL_7 8
+#define KEYCODE_CHANNEL_8 9
+#define KEYCODE_CHANNEL_9 10
+#define KEYCODE_CHANNEL_0 11
+#define KEYCODE_V_PLUS 63
+#define KEYCODE_V_MINUS 64
 
 /* input event values for 'EV_KEY' type */
 #define EV_VALUE_RELEASE    0
@@ -66,4 +78,3 @@ RemoteControllerError registerRemoteControllerCallback(RemoteControllerCallback 
 RemoteControllerError unregisterRemoteControllerCallback(RemoteControllerCallback remoteControllerCallback);
 
 #endif /* __REMOTE_CONTROLLER_H__ */
-
