@@ -26,9 +26,57 @@ static void remoteControllerCallback(uint16_t code, uint16_t type, uint32_t valu
 static pthread_cond_t deinitCond = PTHREAD_COND_INITIALIZER;
 static pthread_mutex_t deinitMutex = PTHREAD_MUTEX_INITIALIZER;
 static ChannelInfo channelInfo;
+static void char2Type (char* types);
 
-int main()
+int main(int8_t argc, char** argv)
 {
+
+	char mod[8];
+	char aType[100];
+	char vType[100];
+
+	FILE* fp;
+
+	if(argc > 1)
+	{
+		fp = fopen(argv[1], "r");
+	}
+	else
+	{
+		fp = fopen("input.txt", "r");
+	}
+
+	rewind(fp);
+	while(!feof(fp))
+	{
+		if(fscanf(fp, "FREQUENCY:%d\n\
+					   BANDWIDTH:%d\n\
+					   MODULE:%s\n\
+					   AUDIO_PID:%d\n\
+					   VIDEO_PID:%d\n\
+					   AUDIO_TYPE:%s\n\
+					   VIDEO_TYPE:%s\n\
+					   PROGRAM_NUMBER:%d", &channelI.frequency, &channelI.bandwidth, mod, &channelI.audioPid, &channelI.videoPid, aType, vType, &channelI.programNumber))
+		{
+			break;
+		}
+	}
+
+	char2Type(mod);
+	char2Type(aType);
+	char2Type(vType);
+	
+	printf("freq: %d\n", channelI.frequency);
+	printf("band: %d\n", channelI.bandwidth);
+	printf("mod: %d\n", channelI.module);
+	printf("aPid: %d\n", channelI.audioPid);
+	printf("vPid: %d\n", channelI.videoPid);
+	printf("aType: %d\n", channelI.audioType);
+	printf("vType: %d\n", channelI.videoType);
+	printf("programNum: %d\n", channelI.programNumber);
+
+	fclose(fp);
+
     /* initialize remote controller module */
     ERRORCHECK(remoteControllerInit());
     
@@ -130,4 +178,62 @@ void remoteControllerCallback(uint16_t code, uint16_t type, uint32_t value)
 		default:
 			printf("\nPress P+, P-, channel 0-9, info or exit! \n\n");
 	}
+}
+
+void char2Type (char types[100])
+{
+	if(strcmp("AUDIO_TYPE_MPEG_AUDIO", types) == 0) 
+	{
+		channelI.audioType = AUDIO_TYPE_MPEG_AUDIO;
+	}
+
+	if(strcmp("AUDIO_TYPE_MP3", types) == 0) 
+	{
+		channelI.audioType = AUDIO_TYPE_MP3;
+	}
+
+	if(strcmp("AUDIO_TYPE_DOLBY_AC3", types) == 0) 
+	{
+		channelI.audioType = AUDIO_TYPE_DOLBY_AC3;
+	}
+
+	if(strcmp("AUDIO_TYPE_HE_AAC", types) == 0) 
+	{
+		channelI.audioType = AUDIO_TYPE_HE_AAC;
+	}
+
+	if(strcmp("VIDEO_TYPE_MPEG4", types) == 0) 
+	{
+		channelI.videoType = VIDEO_TYPE_MPEG4;
+	}
+
+	if(strcmp("VIDEO_TYPE_MPEG2", types) == 0) 
+	{
+		channelI.videoType = VIDEO_TYPE_MPEG2;
+	}
+
+	if(strcmp("VIDEO_TYPE_MPEG1", types) == 0) 
+	{
+		channelI.videoType = VIDEO_TYPE_MPEG1;
+	}
+
+	if(strcmp("VIDEO_TYPE_H264", types) == 0) 
+	{
+		channelI.videoType = VIDEO_TYPE_H264;
+	}
+
+	if(strcmp("DVB_T", types) == 0) 
+	{
+		channelI.module = DVB_T;
+	}
+
+	if(strcmp("DVB_T2", types) == 0) 
+	{
+		channelI.module = DVB_T2;
+	}
+	else
+	{
+		printf("Ne moze!");
+	}
+
 }

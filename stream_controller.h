@@ -29,10 +29,17 @@ typedef enum _StreamControllerError
  */
 typedef struct _ChannelInfo
 {
+	int32_t frequency;
+	int32_t bandwidth;
+	t_Module module;
     int16_t programNumber;
-    int16_t audioPid;
+    int audioPid;
     int16_t videoPid;
+	tStreamType audioType;
+	tStreamType videoType;
 }ChannelInfo;
+
+ChannelInfo channelI;
 
 /**
  * @brief Initializes stream controller module

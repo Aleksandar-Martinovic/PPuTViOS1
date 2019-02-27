@@ -11,6 +11,7 @@
 /**
  * @brief Enumeration of possible tables parser error codes
  */
+
 typedef enum _ParseErrorCode
 {
     TABLES_PARSE_ERROR = 0,                         /* TABLES_PARSE_ERROR */
