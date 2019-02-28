@@ -62,6 +62,46 @@ int main(int8_t argc, char** argv)
 		}
 	}
 
+	if(channelI.audioPid == 103 && channelI.videoPid == 101 && channelI.programNumber == 1) 
+	{
+		printf("PROGRAM 1 IS ON!\n");
+	}
+	else if(channelI.audioPid == 203 && channelI.videoPid == 201 && channelI.programNumber == 2)
+	{
+		printf("PROGRAM 2 IS ON!\n");
+	}
+	else if(channelI.audioPid == 1003 && channelI.videoPid == 1001 && channelI.programNumber == 3)
+	{
+		printf("PROGRAM 3 IS ON!\n");
+	}
+	else if(channelI.audioPid == 1503 && channelI.videoPid == 1501 && channelI.programNumber == 4)
+	{
+		printf("PROGRAM 4 IS ON!\n");
+	}
+	else if(channelI.audioPid == 2001 && channelI.videoPid == -1 && channelI.programNumber == 5)
+	{
+		printf("RADIO 1 IS ON!\n");
+	}
+	else if(channelI.audioPid == 2011 && channelI.videoPid == -1 && channelI.programNumber == 6)
+	{
+		printf("RADIO 2 IS ON!\n");
+	}
+	else if(channelI.audioPid == 2021 && channelI.videoPid == -1 && channelI.programNumber == 7)
+	{
+		printf("RADIO 3 IS ON!\n");
+	}
+	else
+	{
+		printf("MUST HAVE:\n\t\
+	Channel1: AudioPid = 103; VideoPid = 101\n\t\
+	Channel2: AudioPid = 203; VideoPid = 201\n\t\
+	Channel3: AudioPid = 1003; VideoPid = 1001\n\t\
+	Channel4: AudioPid = 1503; VideoPid = 1501\n\t\
+	Radio1: AudioPid = 2001; VideoPid = -1\n\t\
+	Radio2: AudioPid = 2011; VideoPid = -1\n\t\
+	Radio3: AudioPid = 2021; VideoPid = -1");
+	}
+
 	char2Type(mod);
 	char2Type(aType);
 	char2Type(vType);
@@ -187,53 +227,53 @@ void char2Type (char types[100])
 		channelI.audioType = AUDIO_TYPE_MPEG_AUDIO;
 	}
 
-	if(strcmp("AUDIO_TYPE_MP3", types) == 0) 
+	else if(strcmp("AUDIO_TYPE_MP3", types) == 0) 
 	{
 		channelI.audioType = AUDIO_TYPE_MP3;
 	}
 
-	if(strcmp("AUDIO_TYPE_DOLBY_AC3", types) == 0) 
+	else if(strcmp("AUDIO_TYPE_DOLBY_AC3", types) == 0) 
 	{
 		channelI.audioType = AUDIO_TYPE_DOLBY_AC3;
 	}
 
-	if(strcmp("AUDIO_TYPE_HE_AAC", types) == 0) 
+	else if(strcmp("AUDIO_TYPE_HE_AAC", types) == 0) 
 	{
 		channelI.audioType = AUDIO_TYPE_HE_AAC;
 	}
 
-	if(strcmp("VIDEO_TYPE_MPEG4", types) == 0) 
+	else if(strcmp("VIDEO_TYPE_MPEG4", types) == 0) 
 	{
 		channelI.videoType = VIDEO_TYPE_MPEG4;
 	}
 
-	if(strcmp("VIDEO_TYPE_MPEG2", types) == 0) 
+	else if(strcmp("VIDEO_TYPE_MPEG2", types) == 0) 
 	{
 		channelI.videoType = VIDEO_TYPE_MPEG2;
 	}
 
-	if(strcmp("VIDEO_TYPE_MPEG1", types) == 0) 
+	else if(strcmp("VIDEO_TYPE_MPEG1", types) == 0) 
 	{
 		channelI.videoType = VIDEO_TYPE_MPEG1;
 	}
 
-	if(strcmp("VIDEO_TYPE_H264", types) == 0) 
+	else if(strcmp("VIDEO_TYPE_H264", types) == 0) 
 	{
 		channelI.videoType = VIDEO_TYPE_H264;
 	}
 
-	if(strcmp("DVB_T", types) == 0) 
+	else if(strcmp("DVB_T", types) == 0) 
 	{
 		channelI.module = DVB_T;
 	}
 
-	if(strcmp("DVB_T2", types) == 0) 
+	else if(strcmp("DVB_T2", types) == 0) 
 	{
 		channelI.module = DVB_T2;
 	}
 	else
 	{
-		printf("Ne moze!");
+		printf("\nNe moze!");
 	}
 
 }

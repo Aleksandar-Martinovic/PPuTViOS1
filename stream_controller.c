@@ -276,7 +276,7 @@ void* streamControllerTask()
 	}
     
     /* lock to frequency */
-    if(!Tuner_Lock_To_Frequency(channelI.frequency, channelI.bandwidth, DVB_T))
+    if(!Tuner_Lock_To_Frequency(channelI.frequency, channelI.bandwidth, channelI.module))
     {
         printf("\n%s: INFO Tuner_Lock_To_Frequency(): %d Hz - success!\n",__FUNCTION__,channelI.frequency);
     }
