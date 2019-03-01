@@ -1,32 +1,14 @@
-#include "remote_controller.h"
-#include "stream_controller.h"
+#include "vezba_5.h"
+#include "graphics.h"
 
-static inline void textColor(int32_t attr, int32_t fg, int32_t bg)
-{
-   char command[13];
+deinitCond = PTHREAD_COND_INITIALIZER;
+deinitMutex = PTHREAD_MUTEX_INITIALIZER;
 
-   /* command is the control command to the terminal */
-   sprintf(command, "%c[%d;%d;%dm", 0x1B, attr, fg + 30, bg + 40);
-   printf("%s", command);
-}
-
-/* macro function for error checking */
-#define ERRORCHECK(x)                                                       \
-{                                                                           \
-if (x != 0)                                                                 \
- {                                                                          \
-    textColor(1,1,0);                                                       \
-    printf(" Error!\n File: %s \t Line: <%d>\n", __FILE__, __LINE__);       \
-    textColor(0,7,0);                                                       \
-    return -1;                                                              \
- }                                                                          \
-}
-
-static void remoteControllerCallback(uint16_t code, uint16_t type, uint32_t value);
-static pthread_cond_t deinitCond = PTHREAD_COND_INITIALIZER;
-static pthread_mutex_t deinitMutex = PTHREAD_MUTEX_INITIALIZER;
-static ChannelInfo channelInfo;
-static void char2Type (char* types);
+IdirectFBSurface* primary = NULL;
+IDirectFB* dfbInterface = NULL;
+int screenWidth = 0;
+int screenHeight = 0;
+DFBSurfaceDescription surfaceDesc;
 
 int main(int8_t argc, char** argv)
 {
