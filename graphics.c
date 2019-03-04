@@ -1,6 +1,7 @@
 #include "graphics.h"
 #include "vezba_5.h"
 
+
 void graphicInterface()
 {
     struct timeval now;

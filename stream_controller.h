@@ -10,6 +10,7 @@
 #include <time.h>
 #include <errno.h>
 #include <stdbool.h>
+#include <directfb.h>
 
 #define DESIRED_FREQUENCY 818000000	        /* Tune frequency in Hz */
 #define BANDWIDTH 8    				        /* Bandwidth in Mhz */

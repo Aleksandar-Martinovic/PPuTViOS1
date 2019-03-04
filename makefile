@@ -35,7 +35,7 @@ CXXFLAGS = $(CFLAGS)
 all: parser_playback_sample
 
 SRCS =  ./vezba_5.c
-SRCS += ./tables_parser.c ./remote_controller.c ./stream_controller.c
+SRCS += ./tables_parser.c ./remote_controller.c ./stream_controller.c ./graphics.c
 
 parser_playback_sample:
 	$(CC) -o vezba_5 $(INCS) $(SRCS) $(CFLAGS) $(LIBS)

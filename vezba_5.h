@@ -38,8 +38,9 @@ if (x != 0)                                                                 \
 }
 
 static void remoteControllerCallback(uint16_t code, uint16_t type, uint32_t value);
-pthread_cond_t deinitCond;
-pthread_mutex_t deinitMutex;
+ pthread_cond_t deinitCond;
+ pthread_mutex_t deinitMutex;
+
 ChannelInfo channelInfo;
 static void char2Type (char* types);
 

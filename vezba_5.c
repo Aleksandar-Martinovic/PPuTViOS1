@@ -1,10 +1,10 @@
 #include "vezba_5.h"
 #include "graphics.h"
 
-deinitCond = PTHREAD_COND_INITIALIZER;
-deinitMutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t deinitCond = PTHREAD_COND_INITIALIZER;
+pthread_mutex_t deinitMutex = PTHREAD_MUTEX_INITIALIZER;
 
-IdirectFBSurface* primary = NULL;
+IDirectFBSurface* primary = NULL;
 IDirectFB* dfbInterface = NULL;
 int screenWidth = 0;
 int screenHeight = 0;
@@ -27,6 +27,7 @@ int main(int8_t argc, char** argv)
 	{
 		fp = fopen("input.txt", "r");
 	}
+
 
 	rewind(fp);
 	while(!feof(fp))
@@ -99,8 +100,31 @@ int main(int8_t argc, char** argv)
 
 	fclose(fp);
 
+	channelBuffer[3] = '\0';
+
     /* initialize remote controller module */
     ERRORCHECK(remoteControllerInit());
+
+	DirectFBInit(NULL, NULL);
+
+	DirectFBCreate(&dfbInterface);
+
+	dfbInterface->SetCooperativeLevel(dfbInterface, DFSCL_FULLSCREEN);
+
+	surfaceDesc.flags = DSDESC_CAPS;
+	surfaceDesc.caps = DSCAPS_PRIMARY | DSCAPS_FLIPPING;
+	dfbInterface->CreateSurface(dfbInterface, &surfaceDesc, &primary);
+
+	primary->GetSize(primary, &screenWidth, &screenHeight);
+
+	IDirectFBFont* fontInterface = NULL;
+	DFBFontDescription fontDesc;
+
+	fontDesc.flags = DFDESC_HEIGHT;
+	fontDesc.height = 48;
+
+	DFBCHECK(dfbInterface->CreateFont(dfbInterface, "/home/galois/fonts/DejaVuSans.ttf", &fontDesc, &fontInterface));
+	DFBCHECK(primary->SetFont(primary, fontInterface));
     
     /* register remote controller callback */
     ERRORCHECK(registerRemoteControllerCallback(remoteControllerCallback));
@@ -125,6 +149,9 @@ int main(int8_t argc, char** argv)
     /* deinitialize stream controller module */
     ERRORCHECK(streamControllerDeinit());
   
+	primary->Release(primary);
+	dfbInterface->Release(dfbInterface);
+
     return 0;
 }
 
@@ -141,7 +168,10 @@ void remoteControllerCallback(uint16_t code, uint16_t type, uint32_t value)
                 printf("Audio pid: %d\n", channelInfo.audioPid);
                 printf("Video pid: %d\n", channelInfo.videoPid);
                 printf("**********************************************************\n");
-            }
+            
+				graphicInterface();
+			
+			}
 			break;
 		case KEYCODE_P_PLUS:
 			printf("\nCH+ pressed\n");
