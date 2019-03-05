@@ -169,7 +169,7 @@ void remoteControllerCallback(uint16_t code, uint16_t type, uint32_t value)
                 printf("Video pid: %d\n", channelInfo.videoPid);
                 printf("**********************************************************\n");
             
-				graphicInterface();
+				buttonInfo();
 			
 			}
 			break;

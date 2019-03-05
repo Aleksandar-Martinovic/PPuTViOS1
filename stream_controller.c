@@ -1,4 +1,5 @@
 #include "stream_controller.h"
+#include "graphics.h"
 
 static PatTable *patTable;
 static PmtTable *pmtTable;
@@ -18,6 +19,8 @@ static bool changeChannel = false;
 static int16_t programNumber = 0;
 static ChannelInfo currentChannel;
 static bool isInitialized = false;
+static IDirectFBSurface *primary = NULL;
+IDirectFB *dfbInterface = NULL;
 
 static struct timespec lockStatusWaitTime;
 static struct timeval now;
@@ -28,6 +31,11 @@ static pthread_mutex_t demuxMutex = PTHREAD_MUTEX_INITIALIZER;
 static void* streamControllerTask();
 static void startChannel(int32_t channelNumber);
 
+static timer_t timerId;
+static struct itimerspec timerSpec;
+static struct itimerspec timerSpecOld;
+
+struct sigevent signalEvent;
 
 StreamControllerError streamControllerInit()
 {
@@ -149,6 +157,24 @@ StreamControllerError getChannelInfo(ChannelInfo* channelInfo)
  */
 void startChannel(int32_t channelNumber)
 {
+    int32_t ret;
+
+    signalEvent.sigev_notify = SIGEV_THREAD; /* tell the OS to notify you about timer by calling the specified function */
+    signalEvent.sigev_notify_function = wipeScreen; /* function to be called when timer runs out */
+    signalEvent.sigev_value.sival_ptr = NULL;//&currentChannel; /* thread arguments */
+    signalEvent.sigev_notify_attributes = NULL; /* thread attributes (e.g. thread stack size) - if NULL default attributes are applied */
+    ret = timer_create(/*clock for time measuring*/CLOCK_REALTIME,
+                       /*timer settings*/&signalEvent,
+/*where to store the ID of the newly created timer*/&timerId);
+
+    if(ret == -1)
+    {
+        printf("Error creating timer, abort!\n");
+        primary->Release(primary);
+        dfbInterface->Release(dfbInterface);
+
+        return;
+    }
     
     /* free PAT table filter */
     Demux_Free_Filter(playerHandle, filterHandle);
@@ -229,6 +255,20 @@ void startChannel(int32_t channelNumber)
             printf("\n%s : ERROR Cannot create audio stream\n", __FUNCTION__);
             streamControllerDeinit();
         }
+    }
+
+    memset(&timerSpec, 0, sizeof(timerSpec));
+    timerSpec.it_value.tv_sec = 3;
+
+    if(pthread_create(&scThread, NULL, &graphicInterface, NULL))
+    {
+        printf("Error creating input event task!\n");
+    }
+
+    ret = timer_settime(timerId, 0, &timerSpec, &timerSpecOld);
+    if(ret == -1)
+    {
+        printf("Error setting timer in %s!\n", __FUNCTION__);
     }
     
     /* store current channel info */
@@ -407,4 +447,36 @@ int32_t tunerStatusCallback(t_LockStatus status)
         printf("\n%s -----TUNER NOT LOCKED-----\n",__FUNCTION__);
     }
     return 0;
+}
+
+void buttonInfo()
+{
+    int32_t ret;
+    timer_gettime(timerId, &timerSpec);
+
+    if(timerSpec.it_value.tv_sec < 3 && timerSpec.it_value.tv_sec > 0)
+    {
+        memset(&timerSpec, 0, sizeof(timerSpec));
+        timerSpec.it_value.tv_sec = 3;
+
+        ret = timer_settime(timerId, 0, &timerSpec, &timerSpecOld);
+        if (ret == -1)
+        {
+            printf("Error setting timer in %s!\n", __FUNCTION__);
+        }
+    }
+    else
+    {
+        graphicInterface();
+
+        memset(&timerSpec, 0, sizeof(timerSpec));
+        timerSpec.it_value.tv_sec = 3;
+
+        ret = timer_settime(timerId, 0, &timerSpec, &timerSpecOld);
+        if(ret == -1)
+        {
+            printf("Error setting timer in %s!\n", __FUNCTION__);
+        }
+    }
+    
 }

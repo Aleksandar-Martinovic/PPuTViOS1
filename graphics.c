@@ -24,8 +24,9 @@ void graphicInterface()
         }
         else
         {
-            primary->SetColor(primary, 0x00, 0x00, 0x99, 0x99);
+            primary->SetColor(primary, 0x00, 0x00, 0x6b, 0x99);
             primary->FillRectangle(primary, 0, 0, screenWidth, 100);
+            primary->SetColor(primary, 0xcc, 0xcc, 0xe1, 0xff);
         }
 
         sprintf(channelBuffer, "Ch: %d ---> VideoPid: %d ---> AudioPid: %d", channelInfo.programNumber, channelInfo.videoPid, channelInfo.audioPid);
@@ -71,4 +72,31 @@ void graphicInterface()
         primary->Clear(primary, 0, 0, 0, 0);
     }
 
+}
+
+void wipeCreen(union sigval signalArg)
+{
+    printf("WIPE SCREEN\n");
+    int32_t ret;
+
+    if(currentChannel.videoPid != 1)
+    {
+        DFBCHECK(primary->SetColor(primary, 0x00, 0x00, 0x00, 0xff));
+        DFBCHECK(primary->FillRectangle(primary, 0, 4*screenHeight/5, screenWidth, screenHeight/5));//////////
+        DFBCHECK(primary->Flip(primary, NULL, 0));///////////////////
+    }
+    else
+    {
+        DFBCHECK(primary->SetColor(primary, 0x0f,0x0f,0x0f,0xff));
+        DFBCHECK(primary->FillRectangle(primary, 0, 4*screenHeight/5, screenWidth, screenHeight/5));//////
+    
+    }
+
+    memset(&timerSpec,0,sizeof(timerSpec));
+    ret = timer_settime(timerId,0,&timerSpec,&timerSpecOld);
+    if(ret == -1)
+    {
+        printf("Error setting timer in %s!\n", __FUNCTION__);
+} 
+    
 }
