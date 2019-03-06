@@ -16,6 +16,8 @@
 #define DESIRED_FREQUENCY 818000000	        /* Tune frequency in Hz */
 #define BANDWIDTH 8    				        /* Bandwidth in Mhz */
 
+IDirectFB *dfbInterface = NULL;
+
 /**
  * @brief Structure that defines stream controller error
  */
@@ -42,6 +44,12 @@ typedef struct _ChannelInfo
 }ChannelInfo;
 
 ChannelInfo channelI;
+ChannelInfo currentChannel;
+timer_t timerId;
+struct itimerspec timerSpec;
+struct itimerspec timerSpecOld;
+
+bool teleText;
 
 /**
  * @brief Initializes stream controller module

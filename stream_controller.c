@@ -17,10 +17,8 @@ static uint32_t filterHandle = 0;
 static uint8_t threadExit = 0;
 static bool changeChannel = false;
 static int16_t programNumber = 0;
-static ChannelInfo currentChannel;
 static bool isInitialized = false;
-static IDirectFBSurface *primary = NULL;
-IDirectFB *dfbInterface = NULL;
+IDirectFBSurface *primary = NULL;
 
 static struct timespec lockStatusWaitTime;
 static struct timeval now;
@@ -30,10 +28,6 @@ static pthread_mutex_t demuxMutex = PTHREAD_MUTEX_INITIALIZER;
 
 static void* streamControllerTask();
 static void startChannel(int32_t channelNumber);
-
-static timer_t timerId;
-static struct itimerspec timerSpec;
-static struct itimerspec timerSpecOld;
 
 struct sigevent signalEvent;
 
@@ -157,6 +151,7 @@ StreamControllerError getChannelInfo(ChannelInfo* channelInfo)
  */
 void startChannel(int32_t channelNumber)
 {
+    teleText = false;
     int32_t ret;
 
     signalEvent.sigev_notify = SIGEV_THREAD; /* tell the OS to notify you about timer by calling the specified function */
@@ -211,6 +206,16 @@ void startChannel(int32_t channelNumber)
         {
             audioPid = pmtTable->pmtElementaryInfoArray[i].elementaryPid;
         }
+
+        if (teleText == false)
+        {
+            if(pmtTable->pmtElementaryInfoArray[i].streamType == 0x06)
+            {
+                teleText = true;
+                printf("TELETEKST\n");
+            }
+        }
+        
     }
 
     if (videoPid != -1) 

@@ -4,8 +4,8 @@
 pthread_cond_t deinitCond = PTHREAD_COND_INITIALIZER;
 pthread_mutex_t deinitMutex = PTHREAD_MUTEX_INITIALIZER;
 
-IDirectFBSurface* primary = NULL;
-IDirectFB* dfbInterface = NULL;
+//IDirectFBSurface* primary = NULL;
+//IDirectFB* dfbInterface = NULL;
 int screenWidth = 0;
 int screenHeight = 0;
 DFBSurfaceDescription surfaceDesc;
